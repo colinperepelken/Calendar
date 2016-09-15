@@ -1,0 +1,45 @@
+package bernard.colin.calendar;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
+public class Employee {
+	private String firstname, lastname;
+	private int id;
+	private String filename;
+	
+	public Employee (String firstname, String lastname, int id) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.id = id;
+		
+		filename = firstname + "_" + id + ".txt";
+	}
+	
+	public void addEvent(int month, int day, int year, double start, double end) {
+		String text = month + "-" + day + "-" + year + " " + start + " " + end;
+		try {
+			Files.write(Paths.get(filename), text.getBytes(), StandardOpenOption.APPEND);
+		} catch (IOException e) {
+			System.out.println("Error writing to employee file.\n" + e.getMessage());
+		}
+	}
+	
+	public String getFirstName() {
+		return firstname;
+	}
+	
+	public String getLastName() {
+		return lastname;
+	}
+	
+	public int getID() {
+		return id;
+	}
+	
+	public String getFilename() {
+		return filename;
+	}
+}

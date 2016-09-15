@@ -1,0 +1,41 @@
+package bernard.colin.calendar;
+
+import java.awt.Container;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class DayEditor extends JFrame {
+	private static final int FRAME_WIDTH = 420;
+	private static final int FRAME_HEIGHT = 560;
+	
+	private static Container pane;
+	private static JPanel panel;
+	
+	private static JButton addEvent;
+	private static JButton removeEvent;
+	
+	public DayEditor(int month, int day, int year) {
+		super(month + "/" + day + "/" + year);
+		String title = month + "/" + day + "/" + year;
+		
+		// frame settings
+		setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		// pane settings
+		pane = getContentPane();
+		pane.setLayout(null);
+		
+		// panel settings
+		panel = new JPanel();
+		panel.setBorder(BorderFactory.createTitledBorder("Editing: " + title));
+		panel.setBounds(0, 0, FRAME_WIDTH - 5, FRAME_HEIGHT - 5);
+		
+		// add controls
+		pane.add(panel);
+	}
+}

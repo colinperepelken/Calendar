@@ -1,0 +1,15 @@
+package bernard.colin.calendar;
+
+import javax.swing.JFrame;
+
+public class DayEditor extends JFrame {
+	private static final int FRAME_WIDTH = 250;
+	private static final int FRAME_HEIGHT = 300;
+	
+	public DayEditor(int month, int day, int year) {
+		super(month + "/" + day + "/" + year);
+		
+		setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		setVisible(true);
+	}
+}

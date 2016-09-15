@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import javax.swing.BorderFactory;
@@ -14,7 +15,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -38,15 +38,19 @@ public class Calendar {
     private static JButton btnPrev, btnNext;
     private static JTable table;
     private static JComboBox<String> cmbYear;
-    private static JFrame frmMain;
+    private static JFrame frame;
     private static Container pane;
     private static DefaultTableModel model; // table model
     
     private static JScrollPane scrollpane;
-    private static JPanel pnlCalendar;
-    private static int realYear, realMonth, realDay, currentYear, currentMonth;
+    private static JPanel panel;
+    protected static int realYear, realMonth, realDay, currentYear, currentMonth;
     
     public static void main (String args[]){
+    	
+    	// init employees
+    	EmployeeManager.initEmployees();
+    	
         // Look and feel
         try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());}
         catch (ClassNotFoundException e) {}
@@ -55,11 +59,11 @@ public class Calendar {
         catch (UnsupportedLookAndFeelException e) {}
         
         // Prepare frame
-        frmMain = new JFrame ("Calendar"); 
-        frmMain.setSize(660, 750); 
-        pane = frmMain.getContentPane(); //Get content pane
+        frame = new JFrame ("Calendar"); 
+        frame.setSize(660, 750); 
+        pane = frame.getContentPane(); //Get content pane
         pane.setLayout(null); //Apply null layout
-        frmMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Close when X is clicked
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Close when X is clicked
         
         // Create controls
         lblMonth = new JLabel ("January");
@@ -70,10 +74,10 @@ public class Calendar {
         model = new DefaultTableModel();
         table = new JTable(model);       
         scrollpane = new JScrollPane(table);
-        pnlCalendar = new JPanel(null);
+        panel = new JPanel(null);
         
         // Set border
-        pnlCalendar.setBorder(BorderFactory.createTitledBorder("Calendar"));
+        panel.setBorder(BorderFactory.createTitledBorder("Calendar"));
         
         // Register action listeners
         btnPrev.addActionListener(new btnPrev_Action());
@@ -81,16 +85,16 @@ public class Calendar {
         cmbYear.addActionListener(new cmbYear_Action());
         
         // Add controls to pane
-        pane.add(pnlCalendar);
-        pnlCalendar.add(lblMonth);
-        pnlCalendar.add(lblYear);
-        pnlCalendar.add(cmbYear);
-        pnlCalendar.add(btnPrev);
-        pnlCalendar.add(btnNext);
-        pnlCalendar.add(scrollpane);
+        pane.add(panel);
+        panel.add(lblMonth);
+        panel.add(lblYear);
+        panel.add(cmbYear);
+        panel.add(btnPrev);
+        panel.add(btnNext);
+        panel.add(scrollpane);
         
         // Set bounds
-        pnlCalendar.setBounds(0, 0, 640, 670);
+        panel.setBounds(0, 0, 640, 670);
         lblMonth.setBounds(320, 100, 180, 25);
         lblYear.setBounds(390, 610, 80, 20);
         cmbYear.setBounds(460, 610, 80, 20);
@@ -99,8 +103,8 @@ public class Calendar {
         scrollpane.setBounds(20, 100, 600, 500);
         
         // Make frame visible
-        frmMain.setResizable(false);
-        frmMain.setVisible(true);
+        frame.setResizable(false);
+        frame.setVisible(true);
         
         // Get real month/year
         GregorianCalendar cal = new GregorianCalendar(); //Create calendar
@@ -182,6 +186,8 @@ public class Calendar {
         
         //Apply renderers
         table.setDefaultRenderer(table.getColumnClass(0), new tblCalendarRenderer());
+        
+        
     }
     
     @SuppressWarnings("serial")
@@ -298,9 +304,10 @@ class ButtonEditor extends DefaultCellEditor {
 		return button;
 	}
 	
+	// handles when a calendar cell button is clicked
 	public Object getCellEditorValue() {
 		if(isPushed) {
-			JOptionPane.showMessageDialog(button, label + ": Ouch!");
+			new DayEditor(Calendar.currentMonth + 1, Integer.parseInt(label), Calendar.currentYear);
 		}
 		isPushed = false;
 		return new String(label);
